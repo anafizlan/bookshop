@@ -1,0 +1,100 @@
+body{
+    background-image: url("https://images.rawpixel.com/image_png_800/cHJpdmF0ZS90ZW1wbGF0ZXMvZmlsZXMvY3JlYXRlX3Rvb2wvMjAyMy0wNy8wMWd6bjNzcGQ4czhhanlyNjN5YnZieDJ4dC1sazhpeXpuci5wbmc.png");
+   
+}
+
+#container {
+	width: 53%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+nav {
+	font-family: Georgia, "Times New Roman", serif;
+	text-align: center;
+	font-size: 1.25em;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+
+caption {
+	font-weight: bold;
+}
+
+table {
+	border: 0.1em solid pink;
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+}
+
+th,
+td {
+	border: 0.1em solid #dbbfbf;
+	padding: 1em;
+	background-color: rgb(252, 255, 211);
+}
+
+th {
+	background-color: rgb(228, 107, 127);
+	color: #000000;
+}
+
+footer {
+	font-size: .70em;
+	text-align: center;
+	margin-top: 20px;
+}
+
+input,
+select,
+textarea {
+	display: block;
+	margin-bottom: 1em;
+}
+
+.input-name{
+	background-color: #7dcc4b;
+	padding: 20px;
+	border-style: inset 2px;
+	width: 50%;
+	margin: auto;
+	
+}
+
+.input-email{
+	background-color: #5457f1;
+	padding: 20px;
+	border-style: inset 2px;
+	width: 50%;
+	margin: auto;
+}
+
+.input-password{
+	background-color: #f865d3;
+	padding: 20px;
+	border-style: inset 2px;
+	width: 50%;
+	margin: auto;
+}
+a.home{
+    color:#06793f;
+    border: 3px solid #8adbb3;
+    text-decoration: none;
+    background-color: #8adbb3;
+    border-radius: 10px;
+	border-width: 3px;
+	padding-right: 20px;
+	padding-left: 20px;
+}
+a.home:hover, a.home:active {
+  background-color: #06793f;
+  color: #1b1f1b;
+}
+.nav-pills .nav-link.active {
+    background-color: hotpink !important;
+    color: white !important;
+}
