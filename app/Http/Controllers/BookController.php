@@ -9,11 +9,11 @@ class BookController extends Controller
 {
     
     public function recommend(Request $request)
-{
-    $genre = $request->genre;
+    {
+        $genre = $request->genre;
 
-    $books = Book::where('genre', 'ILIKE', "%$genre%", "")->get();
+        $books = Book::where('genre', 'LIKE', "%$genre%", "")->get();
 
-    return view('books', compact('books', 'genre'));
-}
+        return view('books', compact('books', 'genre'));
+    }
 }
