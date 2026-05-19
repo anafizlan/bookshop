@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('genre');
             $table->string('author');
             $table->decimal('price', 10, 2);
-            $table->decimal('stock', 32, 0);
+            $table->integer('stock');
             $table->timestamps();
         });
     }
