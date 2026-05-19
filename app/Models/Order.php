@@ -9,6 +9,7 @@ class Order extends Model
     protected $fillable = [
         'book_title',
         'quantity',
-        'total_price'
+        'total_price',
+        'user_email'
     ];
 }
