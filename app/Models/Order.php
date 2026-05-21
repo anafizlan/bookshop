@@ -10,6 +10,12 @@ class Order extends Model
         'book_title',
         'quantity',
         'total_price',
-        'user_email'
+        'user_id'
     ];
+
+    public function book()
+{
+    return $this->belongsTo(Book::class);
 }
+}
+

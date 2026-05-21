@@ -157,6 +157,15 @@
 
             </div>
 
+            <div style="margin-top:15px; text-align:center;">
+    <p>Don't have an account?</p>
+
+    <a href="{{ route('register') }}" 
+       style="color: #ff4d6d; font-weight:bold; text-decoration:none;">
+        Create Account
+    </a>
+</div>
+
         </form>
 
     </div>

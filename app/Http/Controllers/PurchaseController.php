@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Purchase;
+use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
@@ -13,67 +13,70 @@ class PurchaseController extends Controller
     // show purchase page
     public function index()
     {
-        $books = Purchase::orderBy('id', 'asc')->get();
+        $books = Book::orderBy('id', 'asc')->get();
 
         return view('purchases', compact('books'));
 
         $notifications = DB::table('notifications')
-    ->join('users', 'notifications.from_user_id', '=', 'users.id')
-    ->where('notifications.user_id', Auth::id())
-    ->where('notifications.is_read', false)
-    ->orderBy('notifications.created_at', 'desc')
-    ->select('notifications.*', 'users.name')
-    ->get();
+            ->join('users', 'notifications.from_user_id', '=', 'users.id')
+            ->where('notifications.user_id', Auth::id())
+            ->where('notifications.is_read', false)
+            ->orderBy('notifications.created_at', 'desc')
+            ->select('notifications.*', 'users.name')
+            ->get();
 
-$notifCount = $notifications->count();
+        $notifCount = $notifications->count();
 
-    return view('home', compact('notifications', 'notifCount'));
+        return view('home', compact('notifications', 'notifCount'));
     }
 
     // buy book
-   public function buy(Request $request, $id)
-{
-    session(['quantity' => $request->quantity]);
+    public function buy(Request $request, $id)
+    {
+        session(['quantity' => $request->quantity]);
 
-return redirect()->route('payment', $id);
-}
-
-
-public function payment($id)
-{
-    $book = Purchase::findOrFail($id);
-
-    $qty = session('quantity', 1);
-
-    $total = $book->price * $qty;
-
-    return view('payment', compact('book', 'qty', 'total'));
-}
-
-public function confirmPayment(Request $request, $id)
-{
-    $book = Purchase::findOrFail($id);
-
-    $qty = $request->quantity;
-
-    // check stock
-    if ($qty > $book->stock) {
-        return redirect('/purchase')
-            ->with('error', 'Not enough stock!');
+        return redirect()->route('payment', $id);
     }
 
-    // reduce stock
-    $book->stock -= $qty;
-    $book->save();
 
-    // save order
-    Order::create([
+    public function payment($id)
+    {
+        $book = Book::findOrFail($id);
+
+        $qty = session('quantity', 1);
+
+        $total = $book->price * $qty;
+
+        return view('payment', compact('book', 'qty', 'total'));
+    }
+
+    public function confirmPayment(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+
+        $qty = $request->quantity;
+
+
+        $total = $book->price * $qty;
+
+        // check stock
+        if ($qty > $book->stock) {
+            return redirect('/purchase')
+                ->with('error', 'Not enough stock!');
+        }
+
+        // reduce stock
+        $book->stock -= $qty;
+        $book->save();
+
+        // save order
+        Order::create([
+    'user_id' => Auth::id(),
     'book_title' => $book->title,
     'quantity' => $qty,
-    'total_price' => $book->price * $qty,
-    'user_email' => Auth::user()->email
+    'total_price' => $total,
 ]);
-    return redirect('/purchase')
-        ->with('success', 'Payment successful!');
-}
+        return redirect('/purchase')
+            ->with('success', 'Payment successful!');
+    }
 }

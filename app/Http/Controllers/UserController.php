@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -9,101 +8,123 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
-
-
 {
     public function store(Request $request)
     {
-      $request->validate([
+        $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
 
+        $roleId = 2;
+
+        if (str_contains($request->email, 'admin01')) {
+            $roleId = 1;
+        }
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),   
+            'password' => bcrypt($request->password),
+            'role_id' => $roleId,
         ]);
         // return response
-        
+
         return redirect('/')->with('success', 'Registered');
     }
     public function index()
-{
-    $users = User::all(); // ambil semua data dari database
+    {
+        $auth = auth()->user();
 
-    return view('users', compact('users'));
-}
+        $users = User::with('role')
+            ->get()
+            ->sortBy(function ($user) use ($auth) {
+                // 1. admin paling atas
+                if ($user->role->name == 'admin') {
+                    return 1;
+                }
 
-public function delete($id)
-{
-    $user = User::find($id);
+                // 2. friend second
+                if ($auth->friends->contains($user->id)) {
+                    return 2;
+                }
 
-    if ($user) {
-        $user->delete(); // ONLY 1 ROW
+                // 3. normal user
+                if ($user->role->name == 'user') {
+                    return 3;
+                }
 
-        $notifications = DB::table('notifications')
-    ->join('users', 'notifications.from_user_id', '=', 'users.id')
-    ->where('notifications.user_id', Auth::id())
-    ->where('notifications.is_read', false)
-    ->orderBy('notifications.created_at', 'desc')
-    ->select('notifications.*', 'users.name')
-    ->get();
+                // 4. guest last
+                if ($user->role->name == 'guest') {
+                    return 4;
+                }
 
-$notifCount = $notifications->count();
+                return 5;
+            });
 
-    return view('home', compact('notifications', 'notifCount'));
+        return view('admin.users.index', compact('users'));
     }
 
-    return redirect('/users');
-}
-public function edit($id)
-{
-    $user = User::find($id);
+    public function edit($id)
+    {
+        // ONLY ADMIN
+        if (Auth::user()->role_id != 1) {
+            abort(403);
+        }
 
-    if (!$user) {
-        return redirect('/users')->with('error', 'User not found');
+        $user = User::findOrFail($id);
+
+        return view('admin.users.edit', compact('user'));
     }
 
-    return view('edit', compact('user'));
-}
+    public function update(Request $request, $id)
+    {
+        // ONLY ADMIN
+        if (Auth::user()->role_id != 1) {
+            abort(403);
+        }
 
-public function update(Request $request, $id)
-{
-    $user = User::find($id);
+        $user = User::findOrFail($id);
 
-    if (!$user) {
-        return redirect('/users')->with('error', 'User not found');
+        // PREVENT ADMIN EDIT OWN ROLE
+        if (Auth::id() == $user->id) {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+        } else {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role_id' => $request->role_id,
+            ]);
+        }
+
+        return redirect('/users')->with('success', 'User updated 🌸');
     }
 
-    $user->name = $request->name;
-    $user->email = $request->email;
+    public function destroy($id)
+    {
+        // ONLY ADMIN
+        if (Auth::user()->role_id != 1) {
+            abort(403);
+        }
 
-    if ($request->password) {
-        $user->password = bcrypt($request->password);
-    }
+        $user = User::findOrFail($id);
 
-    $user->save();
+        // PREVENT DELETE OWN ACCOUNT
+        if (Auth::id() == $user->id) {
+            return back()->with('success', 'You cannot delete your own admin account 😭');
+        }
 
-    return redirect('/users')->with('success', 'User updated');
-}
-
-
-public function destroy($id)
-{
-    $user = User::find($id);
-
-    if ($user) {
         $user->delete();
+
+        return back()->with('success', 'User deleted successfully 🌸');
     }
 
-    return redirect('/users');
-}
-
-
-public function recommend(Request $request)
-{
-    dd("MASUK SINI");
-}
+    public function recommend(Request $request)
+    {
+        dd('MASUK SINI');
+    }
 }

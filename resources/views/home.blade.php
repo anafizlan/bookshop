@@ -180,18 +180,7 @@
 
 <body>
 
-    <!-- LOGOUT -->
-    <div class="logout-btn">
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit">
-                Logout
-            </button>
-        </form>
-
-    </div>
+    
 
     <!-- NAVBAR -->
     <nav style="display:flex; justify-content:center; align-items:center; position:relative;">
@@ -201,8 +190,14 @@
     </a>
 
     <a href="{{ url('/users') }}">
-        Users
-    </a>
+
+            @if (Auth::user()->role_id == 1)
+                Users
+            @else
+                Friends
+            @endif
+
+        </a>
 
     <a href="{{ url('/books') }}">
         Books

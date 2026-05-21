@@ -6,37 +6,35 @@
     <title>Books</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Sofia&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
-        body{
-            margin:0;
-            font-family:'Sofia', cursive;
-            background:linear-gradient(135deg,#ffe6f2,#d8fff1);
+        body {
+            margin: 0;
+            font-family: 'Sofia', cursive;
+            background: linear-gradient(135deg, #ffe6f2, #d8fff1);
         }
 
-        .container{
-            width:90%;
-            margin:auto;
-            padding:30px;
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 30px;
         }
 
-        h2{
-            text-align:center;
-            color:green;
-            font-size:50px;
-            letter-spacing:5px;
-            text-shadow:2px 2px 5px green;
-            font-family:'Sofia', cursive;
+        h2 {
+            text-align: center;
+            color: green;
+            font-size: 50px;
+            letter-spacing: 5px;
+            text-shadow: 2px 2px 5px green;
+            font-family: 'Sofia', cursive;
         }
 
         nav {
-            background-color: rgba(255,255,255,0.8);
+            background-color: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             padding: 20px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         nav a {
@@ -55,43 +53,44 @@
             transform: scale(1.05);
         }
 
-        .top-box{
-            
-            padding:20px;
-            border-radius:20px;
-            margin-bottom:30px;
-            box-shadow:0 5px 15px rgba(0,0,0,0.1);
-            text-align:center;
+        .top-box {
+
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
-        select,button{
-            padding:10px;
-            border:none;
-            border-radius:10px;
-            font-family:'Sofia', cursive;
+        select,
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Sofia', cursive;
         }
 
-        button{
-            background:#ff69b4;
-            color:white;
+        button {
+            background: #ff69b4;
+            color: white;
         }
 
-        table{
-            width:100%;
-            background:white;
-            border-radius:20px;
-            overflow:hidden;
-            box-shadow:0 10px 20px rgba(0,0,0,0.1);
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        th{
-            background:#ffc0dc;
-            padding:15px;
+        th {
+            background: #ffc0dc;
+            padding: 15px;
         }
 
-        td{
-            padding:15px;
-            text-align:center;
+        td {
+            padding: 15px;
+            text-align: center;
         }
 
         .logout-btn {
@@ -122,26 +121,25 @@
             font-size: 18px;
         }
 
-        .profile-btn{
-    background-color:#ff9ec7;
-    border:none;
-    padding:10px 20px;
-    border-radius:15px;
-    font-size:18px;
-    transition:0.3s;
-}
+        .profile-btn {
+            background-color: #ff9ec7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
 
-.profile-btn:hover{
-    background-color:#7de3a8;
-}
-
+        .profile-btn:hover {
+            background-color: #7de3a8;
+        }
     </style>
 
 </head>
 
 <body>
 
-<div class="logout-btn">
+    <div class="logout-btn">
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
@@ -156,38 +154,40 @@
     <!-- NAVBAR -->
     <nav style="display:flex; justify-content:center; align-items:center; position:relative;">
 
-    <a href="{{ url('/home') }}">
-        Home
-    </a>
+        <a href="{{ url('/home') }}">
+            Home
+        </a>
 
-    <a href="{{ url('/users') }}">
-        Users
-    </a>
+        <a href="{{ url('/users') }}">
 
-    <a href="{{ url('/books') }}">
-        Books
-    </a>
+            @if (Auth::user()->role_id == 1)
+                Users
+            @else
+                Friends
+            @endif
 
-    <a href="{{ url('/purchase') }}">
-        Purchase
-    </a>
-@include('partials.notification')
-    <!-- PROFILE DROPDOWN -->
-   <div style="position:absolute; right:30px;">
+        </a>
 
-    <div class="dropdown">
+        <a href="{{ url('/books') }}">
+            Books
+        </a>
 
-        <button class="profile-btn dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            style="color:black;">
+        <a href="{{ url('/purchase') }}">
+            Purchase
+        </a>
+        @include('partials.notification')
+        <!-- PROFILE DROPDOWN -->
+        <div style="position:absolute; right:30px;">
 
-            🌸 Profile
+            <div class="dropdown">
 
-        </button>
+                <button class="profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" style="color:black;">
 
-        <div class="dropdown-menu p-3 text-center"
-             style="
+                    🌸 Profile
+
+                </button>
+
+                <div class="dropdown-menu p-3 text-center" style="
              min-width:280px;
              border-radius:20px;
              border:none;
@@ -195,12 +195,10 @@
              background:white;
              ">
 
-            <!-- PROFILE PICTURE -->
+                    <!-- PROFILE PICTURE -->
 
-            @if(Auth::user()->profile_picture)
-
-                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}"
-                     style="
+                    @if (Auth::user()?->profile_picture)
+                        <img src="{{ asset('storage/' . Auth::user()?->profile_picture) }}" style="
                      width:90px;
                      height:90px;
                      border-radius:50%;
@@ -208,42 +206,38 @@
                      border:4px solid #ffb6d9;
                      margin-bottom:10px;
                      ">
-
-            @else
-
-                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                     style="
+                    @else
+                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="
                      width:90px;
                      height:90px;
                      border-radius:50%;
                      border:4px solid #ffb6d9;
                      margin-bottom:10px;
                      ">
-
-            @endif
-
-
-            <!-- NAME -->
-
-            <h5 style="color:#06793f; margin-bottom:5px;">
-                {{ Auth::user()->name }}
-            </h5>
+                    @endif
 
 
-            <!-- EMAIL -->
+                    <!-- NAME -->
 
-            <p style="
+                    <h5 style="color:#06793f; margin-bottom:5px;">
+                        {{ Auth::user()?->name }} 
+                    </h5>
+
+
+                    <!-- EMAIL -->
+
+                    <p style="
                font-size:13px;
                color:gray;
                margin-bottom:10px;
                ">
-                {{ Auth::user()->email }}
-            </p>
+                        {{ Auth::user()?->email }}
+                    </p>
 
 
-            <!-- BIO -->
+                    <!-- BIO -->
 
-            <div style="
+                    <div style="
                  background:#fff0f6;
                  padding:10px;
                  border-radius:12px;
@@ -252,15 +246,14 @@
                  color:#444;
                  ">
 
-                {{ Auth::user()->bio ?? 'No bio yet 🌸' }}
+                        {{ Auth::user()?->bio  ?? 'No bio yet 🌸' }}
 
-            </div>
+                    </div>
 
 
-            <!-- EDIT PROFILE -->
+                    <!-- EDIT PROFILE -->
 
-            <a href="/profile"
-               style="
+                    <a href="/profile" style="
                display:block;
                text-decoration:none;
                background:#ffb6d9;
@@ -271,21 +264,18 @@
                font-weight:bold;
                ">
 
-               Edit Profile
+                        Edit Profile
 
-            </a>
+                    </a>
 
 
-            <!-- LOGOUT -->
+                    <!-- LOGOUT -->
 
-            <form method="POST"
-                  action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}">
 
-                @csrf
+                        @csrf
 
-                <button type="submit"
-                    class="btn w-100"
-                    style="
+                        <button type="submit" class="btn w-100" style="
                     background-color:#ff4d6d;
                     color:white;
                     border:none;
@@ -293,23 +283,23 @@
                     padding:10px;
                     ">
 
-                    Logout
+                            Logout
 
-                </button>
+                        </button>
 
-            </form>
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 
+    </nav>
+    <br>
+    <h2>Recommended Books 📚</h2>
     </div>
-
-</div>
-       
-</nav>
-<br>
-<h2>Recommended Books 📚</h2>
-    </div>
-  <div class="top-box">
+    <div class="top-box">
 
         <p>🌸 Discover amazing books from different genres 🌸</p>
 
@@ -319,12 +309,10 @@
 
                 <option value="">Choose Genre</option>
 
-                @foreach($genres as $g)
-
-                <option value="{{ $g->genre }}">
-                    {{ $g->genre }}
-                </option>
-
+                @foreach ($genres as $g)
+                    <option value="{{ $g->genre }}">
+                        {{ $g->genre }}
+                    </option>
                 @endforeach
 
             </select>
@@ -343,37 +331,36 @@
             <th style="text-align:center;">Author</th>
         </tr>
 
-        @foreach($books as $book)
+        @foreach ($books as $book)
+            <tr>
 
-        <tr>
+                <td>{{ $book->title }}</td>
 
-            <td>{{ $book->title }}</td>
+                <td>{{ $book->genre }}</td>
 
-            <td>{{ $book->genre }}</td>
+                <td>{{ $book->author }}</td>
 
-            <td>{{ $book->author }}</td>
-
-        </tr>
-
+            </tr>
         @endforeach
 
     </table>
 
-</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-@if(session('success'))
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-Swal.fire({
-    title: 'Success!',
-    text: '{{ session('success') }}',
-    icon: 'success',
-    showConfirmButton: false,
-    timer: 1800
-});
-</script>
-@endif
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1800
+            });
+        </script>
+    @endif
 </body>
+
 </html>

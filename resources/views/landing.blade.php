@@ -76,6 +76,12 @@
             color: white;
         }
 
+        .guest-btn{
+            background-color: #80eaf8;
+            color: black;
+
+        }
+
         .register-btn {
             background-color: #7be0b3;
             color: black;
@@ -169,6 +175,9 @@
         </p>
 
         <div style="margin-top:40px;">
+            <a href="/books">
+        <button class="btn-custom guest-btn">Start Browsing</button>
+    </a>
 
             <a href="{{ route('login') }}">
                 <button class="btn-custom login-btn">
@@ -318,6 +327,19 @@
 
     </footer>
 
+    @if (session('success'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        Swal.fire({
+            title: 'Logged Out 👋',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1800
+        });
+    </script>
+@endif
 </body>
 
 </html>

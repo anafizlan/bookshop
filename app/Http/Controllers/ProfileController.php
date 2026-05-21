@@ -35,7 +35,6 @@ class ProfileController extends Controller
         Auth::logout();
 
         $user->delete();
-        
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -43,24 +42,23 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-   public function update(ProfileUpdateRequest $request): RedirectResponse
-{
-    $user = $request->user();
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
 
-    $user->fill($request->validated());
+        $user->fill($request->validated());
 
-    // upload profile picture
-    if ($request->hasFile('pfp')) {
-        $path = $request->file('pfp')->store('pfp', 'public');
-        $user->profile_picture = $path;
+        // upload profile picture
+        if ($request->hasFile('pfp')) {
+            $path = $request->file('pfp')->store('pfp', 'public');
+            $user->profile_picture = $path;
+        }
+
+        // bio
+        $user->bio = $request->bio;
+
+        $user->save();
+
+        return redirect('/home')->with('success', 'Profile updated successfully 🌸');
     }
-
-    // bio
-    $user->bio = $request->bio;
-
-    $user->save();
-
-    return redirect('/home')
-        ->with('success', 'Profile updated successfully 🌸');
-}
 }

@@ -77,8 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Books
-    Route::get('/books', [BookController::class, 'index']);
+   
 
     // Users (friend system nanti)
     Route::post('/chat/{id}', [ChatController::class, 'send']);
@@ -103,7 +102,10 @@ Route::middleware('auth')->group(function () {
 
     // Purchase / Payment
     Route::get('/purchase', [PurchaseController::class, 'index']);
-    Route::post('/buy/{id}', [PurchaseController::class, 'buy']);
+    Route::post('/buy/{id}', [PurchaseController::class, 'buy'])
+        ->middleware('auth');
+    Route::post('/purchase/{id}', [PurchaseController::class, 'store'])
+    ->middleware('auth');
 
     Route::get('/payment/{id}', [PurchaseController::class, 'payment'])
         ->name('payment');
@@ -130,4 +132,24 @@ Route::get('/notification/read/{id}', function($id) {
     return back();
 
 });
+
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/admin/users', [UserController::class, 'index']);
+    Route::get('/admin/users/{id}/edit', [UserController::class, 'edit']);
+    Route::put('/admin/users/{id}', [UserController::class, 'update']);
+    Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+
+});
+
+Route::get('/books', [BookController::class, 'index']);
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/admin/users/edit/{id}', [UserController::class, 'edit']);
+    Route::put('/admin/users/update/{id}', [UserController::class, 'update']);
+    Route::delete('/admin/users/delete/{id}', [UserController::class, 'destroy']);
+
+});
+
 require __DIR__.'/auth.php';
