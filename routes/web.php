@@ -117,6 +117,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/books/hide/{id}', [BookController::class, 'hide']);
     Route::post('/books/show/{id}', [BookController::class, 'show']);
     Route::put('/admin/book/{id}', [PurchaseController::class, 'updateBook']);
+    Route::get('/chat/messages/{id}', [ChatController::class, 'fetchMessages']);
+    Route::post('/admin/book/add', [BookController::class, 'store']);
 });
 
 require __DIR__ . '/auth.php';

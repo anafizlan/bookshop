@@ -305,24 +305,49 @@
 
         <form method="GET" action="/books">
 
-            <select name="genre">
-
-                <option value="">Choose Genre</option>
+            <div style="
+            display:flex;
+            justify-content:center;
+            flex-wrap:wrap;
+            gap:12px;
+            margin-top:20px;
+        ">
 
                 @foreach ($genres as $g)
-                    <option value="{{ $g->genre }}">
+                    <label style="
+                    background:white;
+                    padding:10px 15px;
+                    border-radius:15px;
+                    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+                    cursor:pointer;
+                    transition:0.2s;
+                ">
+
+                        <input type="checkbox" name="genres[]" value="{{ $g->genre }}" style="margin-right:8px;">
+
                         {{ $g->genre }}
-                    </option>
+
+                    </label>
                 @endforeach
 
-            </select>
+            </div>
 
-            <button type="submit">Search</button>
+            <br>
+
+            <button type="submit" style="
+            background:#ff69b4;
+            color:white;
+            border:none;
+            padding:12px 25px;
+            border-radius:15px;
+            font-size:18px;
+            ">
+                Search
+            </button>
 
         </form>
 
     </div>
-
     <table border="1">
 
         <tr>

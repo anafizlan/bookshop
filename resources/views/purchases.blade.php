@@ -322,7 +322,29 @@
     @endif
 
 
+@if(Auth::user()->role_id == 1)
+    <button class="btn btn-success" onclick="document.getElementById('addForm').style.display='block'">
+        + Add Book
+    </button>
+@endif
 
+@if(Auth::user()->role_id == 1)
+<div id="addForm" style="display:none; margin-top:20px;">
+    <form method="POST" action="/admin/book/add">
+        @csrf
+
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="genre" placeholder="Genre" required>
+        <input type="text" name="author" placeholder="Author" required>
+        <input type="number" name="price" placeholder="Price" required>
+        <input type="number" name="stock" placeholder="Stock" required>
+
+        <button type="submit" class="btn btn-primary">
+            Add Book
+        </button>
+    </form>
+</div>
+@endif
     <table border="1">
 
         <tr>
