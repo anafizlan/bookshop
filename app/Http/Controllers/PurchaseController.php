@@ -13,21 +13,9 @@ class PurchaseController extends Controller
     // show purchase page
     public function index()
     {
-        $books = Book::orderBy('id', 'asc')->get();
+        $books = Book::where('is_visible', 1)->orderBy('id', 'asc')->get();
 
         return view('purchases', compact('books'));
-
-        $notifications = DB::table('notifications')
-            ->join('users', 'notifications.from_user_id', '=', 'users.id')
-            ->where('notifications.user_id', Auth::id())
-            ->where('notifications.is_read', false)
-            ->orderBy('notifications.created_at', 'desc')
-            ->select('notifications.*', 'users.name')
-            ->get();
-
-        $notifCount = $notifications->count();
-
-        return view('home', compact('notifications', 'notifCount'));
     }
 
     // buy book
@@ -37,7 +25,6 @@ class PurchaseController extends Controller
 
         return redirect()->route('payment', $id);
     }
-
 
     public function payment($id)
     {
@@ -52,17 +39,16 @@ class PurchaseController extends Controller
 
     public function confirmPayment(Request $request, $id)
     {
+        $book = Book::where('id', $id)->where('is_visible', 1)->firstOrFail();
         $book = Book::findOrFail($id);
 
         $qty = $request->quantity;
-
 
         $total = $book->price * $qty;
 
         // check stock
         if ($qty > $book->stock) {
-            return redirect('/purchase')
-                ->with('error', 'Not enough stock!');
+            return redirect('/purchase')->with('error', 'Not enough stock!');
         }
 
         // reduce stock
@@ -71,12 +57,24 @@ class PurchaseController extends Controller
 
         // save order
         Order::create([
-    'user_id' => Auth::id(),
-    'book_title' => $book->title,
-    'quantity' => $qty,
-    'total_price' => $total,
-]);
-        return redirect('/purchase')
-            ->with('success', 'Payment successful!');
+            'user_id' => Auth::id(),
+            'book_title' => $book->title,
+            'quantity' => $qty,
+            'total_price' => $total,
+        ]);
+        return redirect('/purchase')->with('success', 'Payment successful!');
+    }
+
+    public function updateBook(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+
+        $book->price = $request->price;
+        $book->stock = $request->stock;
+        $book->is_visible = $request->is_visible;
+        $book->is_visible = $request->is_visible ?? 1;
+        $book->save();
+
+        return back()->with('success', 'Book updated successfully');
     }
 }

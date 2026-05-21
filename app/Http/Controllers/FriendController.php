@@ -107,17 +107,31 @@ class FriendController extends Controller
     }
 
     public function showProfile($id)
-    {
-        $user = User::findOrFail($id);
+{
+    $user = User::findOrFail($id);
 
-        $genres = DB::table('orders')->join('books', 'orders.book_id', '=', 'books.id')->where('orders.user_id', $user->id)->select('books.genre')->distinct()->get();
+    $genres = DB::table('orders')
+        ->join('books', 'orders.book_title', '=', 'books.title')
+        ->where('orders.user_id', $user->id)
+        ->select('books.genre')
+        ->distinct()
+        ->get();
 
-        $books = DB::table('orders')->join('books', 'orders.book_id', '=', 'books.id')->where('orders.user_id', $user->id)->select('books.*')->distinct()->get();
+    $books = DB::table('orders')
+        ->join('books', 'orders.book_title', '=', 'books.title')
+        ->where('orders.user_id', $user->id)
+        ->select('books.*')
+        ->distinct()
+        ->get();
 
-        $isFriend = DB::table('friends')->where('user_id', Auth::id())->where('friend_id', $id)->where('status', 'accepted')->exists();
+    $isFriend = DB::table('friends')
+        ->where('user_id', Auth::id())
+        ->where('friend_id', $id)
+        ->where('status', 'accepted')
+        ->exists();
 
-        return view('profile-user', compact('user', 'genres', 'books', 'isFriend'));
-    }
+    return view('profile-user', compact('user', 'genres', 'books', 'isFriend'));
+}
 
     public function accept($id)
     {

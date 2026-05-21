@@ -10,36 +10,31 @@ use Illuminate\Support\Facades\Auth;
 class BookController extends Controller
 {
     // LIST ALL BOOKS
-  public function index(Request $request)
-{
-    $genres = Book::select('genre')->distinct()->get();
+    public function index(Request $request)
+    {
+        $genres = Book::select('genre')->distinct()->get();
 
-    $genre = $request->genre;
+        $genre = $request->genre;
 
-    $books = Book::when($genre, function ($query, $genre) {
+        $user = Auth::user();
+
+        $books = Book::when($genre, function ($query, $genre) {
             return $query->where('genre', $genre);
         })
-        ->orderBy('id', 'asc')
-        ->get();
+            ->when($user->role_id != 1, function ($query) {
+                // USER ONLY SEE VISIBLE BOOKS
+                return $query->where('is_visible', true);
+            })
+            ->orderBy('id', 'asc')
+            ->get();
 
-    // 🔔 NOTIFICATION PART (ADD NI)
-    $notifications = DB::table('notifications')
-        ->join('users', 'notifications.from_user_id', '=', 'users.id')
-        ->where('notifications.user_id', Auth::id())
-        ->select('notifications.*', 'users.name')
-        ->latest()
-        ->get();
+        // 🔔 NOTIFICATION PART (ADD NI)
+        $notifications = DB::table('notifications')->join('users', 'notifications.from_user_id', '=', 'users.id')->where('notifications.user_id', Auth::id())->select('notifications.*', 'users.name')->latest()->get();
 
-    $notifCount = $notifications->where('is_read', false)->count();
+        $notifCount = $notifications->where('is_read', false)->count();
 
-    return view('books', compact(
-        'books',
-        'genres',
-        'genre',
-        'notifications',
-        'notifCount'
-    ));
-}
+        return view('books', compact('books', 'genres', 'genre', 'notifications', 'notifCount'));
+    }
     // FORM CREATE
     public function create()
     {
@@ -73,5 +68,31 @@ class BookController extends Controller
     {
         Book::findOrFail($id)->delete();
         return redirect('/books');
+    }
+
+    public function hide($id)
+    {
+        if (Auth::user()->role_id != 1) {
+            abort(403);
+        }
+
+        Book::where('id', $id)->update([
+            'is_visible' => false,
+        ]);
+
+        return back()->with('success', 'Book hidden');
+    }
+
+    public function show($id)
+    {
+        if (Auth::user()->role_id != 1) {
+            abort(403);
+        }
+
+        Book::where('id', $id)->update([
+            'is_visible' => true,
+        ]);
+
+        return back()->with('success', 'Book visible');
     }
 }

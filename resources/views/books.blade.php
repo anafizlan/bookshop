@@ -220,7 +220,7 @@
                     <!-- NAME -->
 
                     <h5 style="color:#06793f; margin-bottom:5px;">
-                        {{ Auth::user()?->name }} 
+                        {{ Auth::user()?->name }}
                     </h5>
 
 
@@ -246,7 +246,7 @@
                  color:#444;
                  ">
 
-                        {{ Auth::user()?->bio  ?? 'No bio yet 🌸' }}
+                        {{ Auth::user()?->bio ?? 'No bio yet 🌸' }}
 
                     </div>
 
@@ -326,19 +326,43 @@
     <table border="1">
 
         <tr>
-            <th style="text-align:center;">Title</th>
-            <th style="text-align:center;">Genre</th>
-            <th style="text-align:center;">Author</th>
+            <th style="text-align: center">Title</th>
+            <th style="text-align: center">Genre</th>
+            <th style="text-align: center">Author</th>
+
+            @if (Auth::user()->role_id == 1)
+                <th style="text-align: center">Action</th>
+            @endif
         </tr>
 
         @foreach ($books as $book)
             <tr>
 
                 <td>{{ $book->title }}</td>
-
                 <td>{{ $book->genre }}</td>
-
                 <td>{{ $book->author }}</td>
+
+                @if (Auth::user()->role_id == 1)
+                    <td>
+
+                        @if ($book->is_visible)
+                            <form method="POST" action="{{ url('/books/hide/' . $book->id) }}">
+                                @csrf
+                                <button style="background:red;color:white;padding:5px 10px;border:none;border-radius:8px;">
+                                    Hide
+                                </button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ url('/books/show/' . $book->id) }}">
+                                @csrf
+                                <button style="background:green;color:white;padding:5px 10px;border:none;border-radius:8px;">
+                                    Show
+                                </button>
+                            </form>
+                        @endif
+
+                    </td>
+                @endif
 
             </tr>
         @endforeach

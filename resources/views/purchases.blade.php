@@ -347,48 +347,54 @@
 
                 <td>{{ $book->stock }}</td>
 
-                <td>
 
-    @if ($book->stock > 0)
+                @if (Auth::user()->role_id == 1)
+                    <td>
 
-        @auth
+                        <form method="POST" action="/admin/book/{{ $book->id }}">
+                            @csrf
+                            @method('PUT')
 
-            <form method="POST" action="/buy/{{ $book->id }}">
+                            <input type="number" name="price" value="{{ $book->price }}" style="width:80px;">
+                            <input type="number" name="stock" value="{{ $book->stock }}" style="width:80px;">
 
-                @csrf
+                            
 
-                <input type="number"
-                       name="quantity"
-                       min="1"
-                       max="{{ $book->stock }}"
-                       value="1">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Save
+                            </button>
 
-                <button type="submit" class="buy-btn">
-                    Buy
-                </button>
+                        </form>
 
-            </form>
+                    </td>
+                @endif
 
-        @else
+               
 
-            <a href="{{ route('register') }}"
-               class="btn btn-primary">
+                    @if (Auth::user()->role_id != 1)
+<td>
+                        @if ($book->stock > 0)
+                            @auth
+                                <form method="POST" action="/buy/{{ $book->id }}">
+                                    @csrf
 
-                Register to Purchase
+                                    <input type="number" name="quantity" min="1" max="{{ $book->stock }}" value="1">
 
-            </a>
+                                    <button type="submit" class="buy-btn">
+                                        Buy
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('register') }}" class="btn btn-primary">
+                                    Register to Purchase
+                                </a>
+                            @endauth
+                        @else
+                            <span style="color:red;">Sold Out</span>
+                        @endif
+                    @endif
 
-        @endauth
-
-    @else
-
-        <span style="color:red;">
-            Sold Out
-        </span>
-
-    @endif
-
-</td>
+              </td>
 
             </tr>
         @endforeach
