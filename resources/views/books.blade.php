@@ -175,6 +175,11 @@
         <a href="{{ url('/purchase') }}">
             Purchase
         </a>
+
+        <a href="{{ url('/bookshelf') }}">
+            Bookshelf
+        </a>
+
         @include('partials.notification')
         <!-- PROFILE DROPDOWN -->
         <div style="position:absolute; right:30px;">

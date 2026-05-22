@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PurchaseController extends Controller
 {
@@ -56,13 +57,13 @@ class PurchaseController extends Controller
         $book->save();
 
         // save order
-        Order::create([
+        $order = Order::create([
             'user_id' => Auth::id(),
             'book_title' => $book->title,
             'quantity' => $qty,
             'total_price' => $total,
         ]);
-        return redirect('/purchase')->with('success', 'Payment successful!');
+        return redirect('/receipt/' . $order->id);
     }
 
     public function updateBook(Request $request, $id)
@@ -77,4 +78,20 @@ class PurchaseController extends Controller
 
         return back()->with('success', 'Book updated successfully');
     }
+
+    public function receipt($id)
+{
+    $order = Order::findOrFail($id);
+
+    $pdf = Pdf::loadView('receipt', compact('order'));
+
+    return $pdf->download('receipt.pdf');
+}
+
+public function bookshelf()
+{
+    $orders = Order::where('user_id', Auth::id())->get();
+
+    return view('bookshelf', compact('orders'));
+}
 }

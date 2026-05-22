@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase', [PurchaseController::class, 'index']);
     Route::post('/buy/{id}', [PurchaseController::class, 'buy'])->middleware('auth');
     Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->middleware('auth');
+    Route::get('/receipt/{id}', [PurchaseController::class, 'receipt']);
 
     Route::get('/payment/{id}', [PurchaseController::class, 'payment'])->name('payment');
 
@@ -119,6 +120,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/book/{id}', [PurchaseController::class, 'updateBook']);
     Route::get('/chat/messages/{id}', [ChatController::class, 'fetchMessages']);
     Route::post('/admin/book/add', [BookController::class, 'store']);
+    Route::get('/bookshelf', [PurchaseController::class, 'bookshelf']);
 });
 
 require __DIR__ . '/auth.php';

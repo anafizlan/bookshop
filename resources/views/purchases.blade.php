@@ -181,6 +181,11 @@
         <a href="{{ url('/purchase') }}">
             Purchase
         </a>
+
+        <a href="{{ url('/bookshelf') }}">
+            Bookshelf
+        </a>
+
         @include('partials.notification')
         <!-- PROFILE DROPDOWN -->
         <div style="position:absolute; right:30px;">
@@ -305,6 +310,7 @@
     </nav>
     <br>
     <h2>Purchase Books 📚</h2>
+
     @if (session('success'))
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -322,29 +328,30 @@
     @endif
 
 
-@if(Auth::user()->role_id == 1)
-    <button class="btn btn-success" onclick="document.getElementById('addForm').style.display='block'">
-        + Add Book
-    </button>
-@endif
-
-@if(Auth::user()->role_id == 1)
-<div id="addForm" style="display:none; margin-top:20px;">
-    <form method="POST" action="/admin/book/add">
-        @csrf
-
-        <input type="text" name="title" placeholder="Title" required>
-        <input type="text" name="genre" placeholder="Genre" required>
-        <input type="text" name="author" placeholder="Author" required>
-        <input type="number" name="price" placeholder="Price" required>
-        <input type="number" name="stock" placeholder="Stock" required>
-
-        <button type="submit" class="btn btn-primary">
-            Add Book
+    @if (Auth::user()->role_id == 1)
+        <button class="btn btn-success" onclick="document.getElementById('addForm').style.display='block'">
+            + Add Book
         </button>
-    </form>
-</div>
-@endif
+    @endif
+
+    @if (Auth::user()->role_id == 1)
+        <div id="addForm" style="display:none; margin-top:20px;">
+            <form method="POST" action="/admin/book/add">
+                @csrf
+
+                <input type="text" name="title" placeholder="Title" required>
+                <input type="text" name="genre" placeholder="Genre" required>
+                <input type="text" name="author" placeholder="Author" required>
+                <input type="number" name="price" placeholder="Price" required>
+                <input type="number" name="stock" placeholder="Stock" required>
+
+                <button type="submit" class="btn btn-primary">
+                    Add Book
+                </button>
+            </form>
+        </div>
+    @endif
+
     <table border="1">
 
         <tr>
@@ -380,7 +387,7 @@
                             <input type="number" name="price" value="{{ $book->price }}" style="width:80px;">
                             <input type="number" name="stock" value="{{ $book->stock }}" style="width:80px;">
 
-                            
+
 
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Save
@@ -391,10 +398,10 @@
                     </td>
                 @endif
 
-               
 
-                    @if (Auth::user()->role_id != 1)
-<td>
+
+                @if (Auth::user()->role_id != 1)
+                    <td>
                         @if ($book->stock > 0)
                             @auth
                                 <form method="POST" action="/buy/{{ $book->id }}">
@@ -414,9 +421,9 @@
                         @else
                             <span style="color:red;">Sold Out</span>
                         @endif
-                    @endif
+                @endif
 
-              </td>
+                </td>
 
             </tr>
         @endforeach

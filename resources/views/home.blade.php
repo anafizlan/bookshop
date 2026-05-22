@@ -7,8 +7,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Sofia&display=swap" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         * {
@@ -24,11 +23,11 @@
 
         /* Navbar */
         nav {
-            background-color: rgba(255,255,255,0.8);
+            background-color: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             padding: 20px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         nav a {
@@ -72,7 +71,7 @@
             border-radius: 25px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: 0.3s;
         }
 
@@ -104,7 +103,7 @@
             border-radius: 25px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: 0.3s;
         }
 
@@ -162,34 +161,34 @@
             font-size: 18px;
         }
 
-        .profile-btn{
-    background-color:#ff9ec7;
-    border:none;
-    padding:10px 20px;
-    border-radius:15px;
-    font-size:18px;
-    transition:0.3s;
-}
+        .profile-btn {
+            background-color: #ff9ec7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
 
-.profile-btn:hover{
-    background-color:#7de3a8;
-}
+        .profile-btn:hover {
+            background-color: #7de3a8;
+        }
     </style>
 
 </head>
 
 <body>
 
-    
+
 
     <!-- NAVBAR -->
     <nav style="display:flex; justify-content:center; align-items:center; position:relative;">
 
-    <a href="{{ url('/home') }}">
-        Home
-    </a>
+        <a href="{{ url('/home') }}">
+            Home
+        </a>
 
-    <a href="{{ url('/users') }}">
+        <a href="{{ url('/users') }}">
 
             @if (Auth::user()->role_id == 1)
                 Users
@@ -199,29 +198,30 @@
 
         </a>
 
-    <a href="{{ url('/books') }}">
-        Books
-    </a>
+        <a href="{{ url('/books') }}">
+            Books
+        </a>
 
-    <a href="{{ url('/purchase') }}">
-        Purchase
-    </a>
+        <a href="{{ url('/purchase') }}">
+            Purchase
+        </a>
 
-    <!-- PROFILE DROPDOWN -->
-   <div style="position:absolute; right:30px;">
+        <a href="{{ url('/bookshelf') }}">
+            Bookshelf
+        </a>
 
-    <div class="dropdown">
+        <!-- PROFILE DROPDOWN -->
+        <div style="position:absolute; right:30px;">
 
-        <button class="profile-btn dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown">
+            <div class="dropdown">
 
-            🌸 Profile
+                <button class="profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
 
-        </button>
+                    🌸 Profile
 
-        <div class="dropdown-menu p-3 text-center"
-             style="
+                </button>
+
+                <div class="dropdown-menu p-3 text-center" style="
              min-width:280px;
              border-radius:20px;
              border:none;
@@ -229,12 +229,10 @@
              background:white;
              ">
 
-            <!-- PROFILE PICTURE -->
+                    <!-- PROFILE PICTURE -->
 
-            @if(Auth::user()->profile_picture)
-
-                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}"
-                     style="
+                    @if (Auth::user()->profile_picture)
+                        <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" style="
                      width:90px;
                      height:90px;
                      border-radius:50%;
@@ -242,42 +240,38 @@
                      border:4px solid #ffb6d9;
                      margin-bottom:10px;
                      ">
-
-            @else
-
-                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                     style="
+                    @else
+                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="
                      width:90px;
                      height:90px;
                      border-radius:50%;
                      border:4px solid #ffb6d9;
                      margin-bottom:10px;
                      ">
-
-            @endif
-
-
-            <!-- NAME -->
-
-            <h5 style="color:#06793f; margin-bottom:5px;">
-                {{ Auth::user()->name }}
-            </h5>
+                    @endif
 
 
-            <!-- EMAIL -->
+                    <!-- NAME -->
 
-            <p style="
+                    <h5 style="color:#06793f; margin-bottom:5px;">
+                        {{ Auth::user()->name }}
+                    </h5>
+
+
+                    <!-- EMAIL -->
+
+                    <p style="
                font-size:13px;
                color:gray;
                margin-bottom:10px;
                ">
-                {{ Auth::user()->email }}
-            </p>
+                        {{ Auth::user()->email }}
+                    </p>
 
 
-            <!-- BIO -->
+                    <!-- BIO -->
 
-            <div style="
+                    <div style="
                  background:#fff0f6;
                  padding:10px;
                  border-radius:12px;
@@ -286,15 +280,14 @@
                  color:#444;
                  ">
 
-                {{ Auth::user()->bio ?? 'No bio yet 🌸' }}
+                        {{ Auth::user()->bio ?? 'No bio yet 🌸' }}
 
-            </div>
+                    </div>
 
 
-            <!-- EDIT PROFILE -->
+                    <!-- EDIT PROFILE -->
 
-            <a href="/profile"
-               style="
+                    <a href="/profile" style="
                display:block;
                text-decoration:none;
                background:#ffb6d9;
@@ -305,21 +298,18 @@
                font-weight:bold;
                ">
 
-               Edit Profile
+                        Edit Profile
 
-            </a>
+                    </a>
 
 
-            <!-- LOGOUT -->
+                    <!-- LOGOUT -->
 
-            <form method="POST"
-                  action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}">
 
-                @csrf
+                        @csrf
 
-                <button type="submit"
-                    class="btn w-100"
-                    style="
+                        <button type="submit" class="btn w-100" style="
                     background-color:#ff4d6d;
                     color:white;
                     border:none;
@@ -327,23 +317,22 @@
                     padding:10px;
                     ">
 
-                    Logout
+                            Logout
 
-                </button>
+                        </button>
 
-            </form>
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
 
-</div>
+        <div style="position:relative; display:inline-block; margin-left:15px;">
 
-
-<div style="position:relative; display:inline-block; margin-left:15px;">
-
-    <button onclick="toggleNotif()"
-        style="
+            <button onclick="toggleNotif()" style="
         background:#ff9ec7;
         border:none;
         padding:10px 15px;
@@ -353,10 +342,10 @@
         position:relative;
         ">
 
-        🔔
+                🔔
 
-        @if($notifCount > 0)
-        <span style="
+                @if ($notifCount > 0)
+                    <span style="
             position:absolute;
             top:-5px;
             right:-5px;
@@ -366,14 +355,13 @@
             padding:3px 6px;
             border-radius:50%;
         ">
-            {{ $notifCount }}
-        </span>
-        @endif
+                        {{ $notifCount }}
+                    </span>
+                @endif
 
-    </button>
+            </button>
 
-    <div id="notifBox"
-    style="
+            <div id="notifBox" style="
     display:none;
     position:absolute;
     right:0;
@@ -387,50 +375,42 @@
     z-index:999;
     ">
 
-    <h4 style="padding:12px; margin:0; border-bottom:1px solid #eee;">
-        🔔 Notifications
-    </h4>
+                <h4 style="padding:12px; margin:0; border-bottom:1px solid #eee;">
+                    🔔 Notifications
+                </h4>
 
-    @forelse($notifications->whereNull('read_at') as $n)
+                @forelse($notifications->whereNull('read_at') as $n)
+                    @if ($n->type == 'message')
+                        <a href="{{ url('/notification/read/' . $n->id) }}" style="display:block;padding:12px;text-decoration:none;color:black;">
+                            💬 <b>{{ $n->name }}</b> sent you a message
+                        </a>
+                    @elseif($n->type == 'friend_request')
+                        <div style="padding:12px;">
 
-    @if($n->type == 'message')
+                            👤 <b>{{ $n->name }}</b> sent you friend request
 
-        <a href="{{ url('/notification/read/' . $n->id) }}"
-           style="display:block;padding:12px;text-decoration:none;color:black;">
-            💬 <b>{{ $n->name }}</b> sent you a message
-        </a>
+                            <div style="margin-top:10px; display:flex; gap:10px;">
 
-    @elseif($n->type == 'friend_request')
+                                <a href="{{ url('/friend/accept/' . $n->from_user_id) }}" style="background:green;color:white;padding:6px 10px;border-radius:10px;">
+                                    Accept
+                                </a>
 
-        <div style="padding:12px;">
+                                <a href="{{ url('/friend/reject/' . $n->from_user_id) }}" style="background:red;color:white;padding:6px 10px;border-radius:10px;">
+                                    Reject
+                                </a>
 
-            👤 <b>{{ $n->name }}</b> sent you friend request
+                            </div>
+                        </div>
+                    @endif
 
-            <div style="margin-top:10px; display:flex; gap:10px;">
-
-                <a href="{{ url('/friend/accept/' . $n->from_user_id) }}"
-                   style="background:green;color:white;padding:6px 10px;border-radius:10px;">
-                    Accept
-                </a>
-
-                <a href="{{ url('/friend/reject/' . $n->from_user_id) }}"
-                   style="background:red;color:white;padding:6px 10px;border-radius:10px;">
-                    Reject
-                </a>
+                @empty
+                    <p style="padding:10px;">No notifications 🌸</p>
+                @endforelse
 
             </div>
+
         </div>
-
-    @endif
-
-@empty
-    <p style="padding:10px;">No notifications 🌸</p>
-@endforelse
-
-</div>
-
-</div>
-</nav>
+    </nav>
 
     <!-- WELCOME -->
     <section class="welcome-box">
@@ -441,18 +421,18 @@
 
         <p>
             Discover your favourite books and enjoy reading today ✨</p>
-           <p>From best-selling novels to legendary worlds brought to life on screen, explore books that shaped generations.
+        <p>From best-selling novels to legendary worlds brought to life on screen, explore books that shaped generations.
         </p>
 
     </section>
 
     <!-- STATS -->
-    
+
     <!-- POPULAR BOOKS -->
     <section class="container">
 
         <h2 class="section-title">
-           🌸 Popular Books 🌸
+            🌸 Popular Books 🌸
         </h2>
 
         <div class="row g-4">
@@ -515,19 +495,19 @@
         “Reading gives us somewhere to go when we have to stay where we are.” 📖
 
     </div>
-@if(session('success'))
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-Swal.fire({
-    title: 'Success!',
-    text: '{{ session('success') }}',
-    icon: 'success',
-    showConfirmButton: false,
-    timer: 1800
-});
-</script>
-@endif
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1800
+            });
+        </script>
+    @endif
     <!-- FOOTER -->
     <footer>
 
@@ -538,34 +518,32 @@ Swal.fire({
         © 2026 Bookshop. All Rights Reserved.
 
     </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleNotif() {
 
-function toggleNotif() {
+            let box = document.getElementById('notifBox');
 
-    let box = document.getElementById('notifBox');
+            if (box.style.display === 'none') {
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
+            }
 
-    if (box.style.display === 'none') {
-        box.style.display = 'block';
-    } else {
-        box.style.display = 'none';
-    }
+        }
 
-}
+        document.addEventListener('click', function(event) {
 
-document.addEventListener('click', function(event) {
+            let box = document.getElementById('notifBox');
 
-    let box = document.getElementById('notifBox');
+            if (!event.target.closest('#notifBox') &&
+                !event.target.closest('button')) {
 
-    if (!event.target.closest('#notifBox') &&
-        !event.target.closest('button')) {
+                box.style.display = 'none';
+            }
 
-        box.style.display = 'none';
-    }
-
-});
-
-</script>
+        });
+    </script>
 </body>
 
 </html>

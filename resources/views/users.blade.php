@@ -155,6 +155,11 @@
         <a href="{{ url('/purchase') }}">
             Purchase
         </a>
+
+        <a href="{{ url('/bookshelf') }}">
+            Bookshelf
+        </a>
+
         @include('partials.notification')
         </div>
         </div>
@@ -426,22 +431,22 @@
        ">
                                     Edit
                                 </a>
-@if(Auth::id() != $user->id)
-                                <form action="{{ url('/admin/users/delete/' . $user->id) }}" method="POST" style="margin-top:10px;">
+                                @if (Auth::id() != $user->id)
+                                    <form action="{{ url('/admin/users/delete/' . $user->id) }}" method="POST" style="margin-top:10px;">
 
-                                    @csrf
-                                    @method('DELETE')
+                                        @csrf
+                                        @method('DELETE')
 
-                                    <button type="submit" onclick="return confirm('Delete this user?')" style="
+                                        <button type="submit" onclick="return confirm('Delete this user?')" style="
                                                 background:#ff4d6d;
                                                 color:white;
                                                 border:none;
                                                 padding:8px 12px;
                                                 border-radius:10px;
                                                 ">
-                                         Delete
-                                    </button>
-@endif
+                                            Delete
+                                        </button>
+                                @endif
                                 </form>
                             @else
                                 @php
