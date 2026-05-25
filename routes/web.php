@@ -121,6 +121,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/messages/{id}', [ChatController::class, 'fetchMessages']);
     Route::post('/admin/book/add', [BookController::class, 'store']);
     Route::get('/bookshelf', [PurchaseController::class, 'bookshelf']);
+    Route::get('/get-notifications', [NotificationController::class, 'getNotifications']);
 });
 
 require __DIR__ . '/auth.php';

@@ -34,4 +34,19 @@ class NotificationController extends Controller
 
     return redirect()->back();
 }
+
+public function getNotifications()
+{
+    $notifications = DB::table('notifications')
+        ->join('users', 'notifications.from_user_id', '=', 'users.id')
+        ->where('notifications.user_id', Auth::id())
+        ->where('notifications.is_read', false)
+        ->orderBy('notifications.created_at', 'desc')
+        ->select('notifications.*', 'users.name')
+        ->get();
+
+    return response()->json($notifications);
+}
+
+
 }
