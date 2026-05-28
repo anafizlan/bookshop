@@ -186,6 +186,12 @@
             Bookshelf
         </a>
 
+        @if (Auth::user()->role_id == 1)
+            <a href="/admin/dashboard">
+                Dashboard
+            </a>
+        @endif
+
         @include('partials.notification')
         <!-- PROFILE DROPDOWN -->
         <div style="position:absolute; right:30px;">

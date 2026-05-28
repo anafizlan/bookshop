@@ -210,6 +210,12 @@
             Bookshelf
         </a>
 
+        @if (Auth::user()->role_id == 1)
+            <a href="/admin/dashboard">
+                Dashboard
+            </a>
+        @endif
+
         <!-- PROFILE DROPDOWN -->
         <div style="position:absolute; right:30px;">
 
@@ -344,8 +350,8 @@
 
                 🔔
 
-               
-                    <span id="notifCount" style="
+
+                <span id="notifCount" style="
                     position:absolute;
                     top:-5px;
                     right:-5px;
@@ -356,8 +362,8 @@
                     border-radius:50%;
                     display:none;
                     ">
-                    </span>
-             
+                </span>
+
 
             </button>
 
@@ -546,44 +552,41 @@
     </script>
 
     <script>
+        async function loadNotifications() {
 
-async function loadNotifications() {
+            let response = await fetch('/get-notifications');
 
-    let response = await fetch('/get-notifications');
+            let data = await response.json();
 
-    let data = await response.json();
+            let notifBox = document.getElementById('notifBox');
 
-    let notifBox = document.getElementById('notifBox');
+            let notifCount = document.getElementById('notifCount');
 
-    let notifCount = document.getElementById('notifCount');
-
-    notifBox.innerHTML = `
+            notifBox.innerHTML = `
         <h4 style="padding:12px; margin:0; border-bottom:1px solid #eee;">
             🔔 Notifications
         </h4>
     `;
 
-    if(data.length > 0){
+            if (data.length > 0) {
 
-        notifCount.style.display = 'block';
-        notifCount.innerText = data.length;
+                notifCount.style.display = 'block';
+                notifCount.innerText = data.length;
 
-        data.forEach(n => {
+                data.forEach(n => {
 
-            if(n.type == 'message'){
+                    if (n.type == 'message') {
 
-                notifBox.innerHTML += `
+                        notifBox.innerHTML += `
                     <a href="/notification/read/${n.id}"
                        style="display:block;padding:12px;text-decoration:none;color:black;">
                        💬 <b>${n.name}</b> sent you a message
                     </a>
                 `;
 
-            }
+                    } else if (n.type == 'friend_request') {
 
-            else if(n.type == 'friend_request'){
-
-                notifBox.innerHTML += `
+                        notifBox.innerHTML += `
                     <div style="padding:12px;">
 
                         👤 <b>${n.name}</b> sent you friend request
@@ -605,28 +608,27 @@ async function loadNotifications() {
                     </div>
                 `;
 
-            }
+                    }
 
-        });
+                });
 
-    } else {
+            } else {
 
-        notifCount.style.display = 'none';
+                notifCount.style.display = 'none';
 
-        notifBox.innerHTML += `
+                notifBox.innerHTML += `
             <p style="padding:10px;">
                 No notifications 🌸
             </p>
         `;
-    }
+            }
 
-}
+        }
 
-loadNotifications();
+        loadNotifications();
 
-setInterval(loadNotifications, 3000);
-
-</script>
+        setInterval(loadNotifications, 3000);
+    </script>
 
 
 

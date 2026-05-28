@@ -12,6 +12,14 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\HomeController;
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/home', [HomeController::class, 'index'])
+        ->name('home');
+
+});
 
 Route::get('/home', function () {
     $notifications = DB::table('notifications')->join('users', 'notifications.from_user_id', '=', 'users.id')->where('notifications.user_id', Auth::id())->orderBy('notifications.created_at', 'desc')->select('notifications.*', 'users.name')->get();
@@ -51,9 +59,7 @@ Route::middleware('guest')->group(function () {
 */
 Route::middleware('auth')->group(function () {
     // Home
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
+   
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -89,23 +95,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/confirm-payment/{id}', [PurchaseController::class, 'confirmPayment']);
 });
 
-Route::get('/notification/read/{id}', function ($id) {
-    $notif = DB::table('notifications')->where('id', $id)->first();
 
-    DB::table('notifications')->where('id', $id)->delete();
 
-    if ($notif && $notif->type == 'message') {
-        return redirect('/chat/' . $notif->from_user_id);
-    }
 
-    return back();
-});
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'index']);
     Route::get('/admin/users/{id}/edit', [UserController::class, 'edit']);
     Route::put('/admin/users/{id}', [UserController::class, 'update']);
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard']);
 });
 
 Route::get('/books', [BookController::class, 'index']);
